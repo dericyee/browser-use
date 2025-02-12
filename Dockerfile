@@ -1,29 +1,39 @@
-FROM mcr.microsoft.com/playwright/python:v1.41.0-jammy
+FROM python:3.11-bullseye
 
-# Install Python 3.11
+# Install system dependencies for Playwright
 RUN apt-get update && apt-get install -y \
-    software-properties-common \
-    && add-apt-repository ppa:deadsnakes/ppa \
-    && apt-get update \
-    && apt-get install -y \
-    python3.11 \
-    python3.11-venv \
-    python3.11-dev \
+    curl \
+    gnupg \
+    && curl -sL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get update && apt-get install -y \
+    nodejs \
+    libnss3 \
+    libnspr4 \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libcups2 \
+    libdrm2 \
+    libxkbcommon0 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxfixes3 \
+    libxrandr2 \
+    libgbm1 \
+    libasound2 \
+    libpango-1.0-0 \
+    libcairo2 \
+    libgstreamer1.0-0 \
+    libgstreamer-plugins-base1.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# Create and activate virtual environment
-ENV VIRTUAL_ENV=/opt/venv
-RUN python3.11 -m venv $VIRTUAL_ENV
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
-
 WORKDIR /app
-
-# Upgrade pip
-RUN pip install --upgrade pip
 
 # Install pip requirements
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+
+# Install playwright and browser
+RUN playwright install --with-deps chromium
 
 # Copy the rest of the application
 COPY . .
