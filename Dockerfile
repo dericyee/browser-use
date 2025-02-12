@@ -24,6 +24,8 @@ RUN apt-get update && apt-get install -y \
     libcairo2 \
     libgstreamer1.0-0 \
     libgstreamer-plugins-base1.0-0 \
+    libxcursor1 \
+    libgtk-3-0 \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
