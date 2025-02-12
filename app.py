@@ -57,9 +57,7 @@ try:
         examples=[
             ["Go to Reddit, search for 'browser-use', and return the title of the first post."],
             ["Search for 'machine learning' on Google and return the first 3 results."]
-        ],
-        allow_flagging="never",
-        cache_examples=False
+        ]
     )
 except Exception as e:
     logger.exception("Error creating Gradio interface")
@@ -70,13 +68,11 @@ if __name__ == "__main__":
     try:
         port = int(os.environ.get("PORT", 7860))
         logger.info("Starting server on port %s...", port)
+        # Start with minimal options to ensure quick startup
         iface.launch(
             server_name="0.0.0.0",
             server_port=port,
-            show_error=True,
-            quiet=False,
-            enable_queue=True,
-            debug=True
+            show_error=True
         )
     except Exception as e:
         logger.exception("Failed to start server")
