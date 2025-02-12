@@ -7,15 +7,28 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# Debug: Print environment variables (excluding sensitive data)
+print("Environment variables available:", [k for k in os.environ.keys()])
+print("OPENAI_API_KEY present:", "OPENAI_API_KEY" in os.environ)
+print("PORT value:", os.environ.get("PORT"))
+
 async def process_task(task):
     try:
+        if not os.getenv("OPENAI_API_KEY"):
+            return "Error: OpenAI API key not found. Please set the OPENAI_API_KEY environment variable."
+            
+        print("Initializing ChatOpenAI...")
+        llm = ChatOpenAI(model="gpt-4")
+        print("Creating Agent...")
         agent = Agent(
             task=task,
-            llm=ChatOpenAI(model="gpt-4"),
+            llm=llm,
         )
+        print("Running task:", task)
         result = await agent.run()
         return result
     except Exception as e:
+        print("Error occurred:", str(e))
         return f"Error: {str(e)}"
 
 def run_task(task):
@@ -36,5 +49,10 @@ iface = gr.Interface(
 
 # Launch with server name and port for Railway
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 7860))
-    iface.launch(server_name="0.0.0.0", server_port=port) 
+    try:
+        port = int(os.environ.get("PORT", 7860))
+        print(f"Starting server on port {port}...")
+        iface.launch(server_name="0.0.0.0", server_port=port, show_error=True)
+    except Exception as e:
+        print("Failed to start server:", str(e))
+        raise 
