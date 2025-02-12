@@ -2,12 +2,6 @@ FROM python:3.11-slim
 
 # Install system dependencies for Playwright
 RUN apt-get update && apt-get install -y \
-    wget \
-    gnupg \
-    && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/sources.list.d/google.list' \
-    && apt-get update \
-    && apt-get install -y \
     libnss3 \
     libnspr4 \
     libatk1.0-0 \
@@ -21,6 +15,19 @@ RUN apt-get update && apt-get install -y \
     libxrandr2 \
     libgbm1 \
     libasound2 \
+    libx11-6 \
+    libxcb1 \
+    libxext6 \
+    libxcomposite1 \
+    libxcursor1 \
+    libxdamage1 \
+    libxfixes3 \
+    libxi6 \
+    libxrandr2 \
+    libxrender1 \
+    libxss1 \
+    libxtst6 \
+    fonts-liberation \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -29,8 +36,8 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Install playwright
-RUN pip install playwright && playwright install --with-deps chromium
+# Install playwright and browser
+RUN pip install playwright && playwright install chromium --with-deps
 
 # Copy the rest of the application
 COPY . .
