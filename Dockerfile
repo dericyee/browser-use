@@ -33,6 +33,31 @@ RUN apt-get update && apt-get install -y \
     libgdk-pixbuf-2.0-0 \
     libpangocairo-1.0-0 \
     libcairo-gobject2 \
+    # New dependencies
+    libgstreamer1.0-0 \
+    libgtk-4-1 \
+    libgraphene-1.0-0 \
+    libatomic1 \
+    libxslt1.1 \
+    libwoff1 \
+    libvpx7 \
+    libevent-2.1-7 \
+    libopus0 \
+    libgstreamer-plugins-base1.0-0 \
+    libgstreamer-plugins-bad1.0-0 \
+    libwebp7 \
+    libwebpdemux2 \
+    libavif13 \
+    libharfbuzz-icu0 \
+    libwebpmux3 \
+    libenchant-2-2 \
+    libsecret-1-0 \
+    libhyphen0 \
+    libmanette-0.2-0 \
+    libpsl5 \
+    libnghttp2-14 \
+    libgles2 \
+    x264 \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -42,7 +67,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Install playwright and browser
-RUN pip install playwright && playwright install chromium --with-deps
+RUN pip install playwright && DEBIAN_FRONTEND=noninteractive playwright install chromium --with-deps
 
 # Copy the rest of the application
 COPY . .
