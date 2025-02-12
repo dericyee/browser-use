@@ -26,6 +26,18 @@ RUN apt-get update && apt-get install -y \
     libgstreamer-plugins-base1.0-0 \
     libxcursor1 \
     libgtk-3-0 \
+    # Additional missing dependencies
+    libwoff1 \
+    flite1-dev \
+    libharfbuzz-icu0 \
+    libenchant-2-2 \
+    libsecret-1-0 \
+    libhyphen0 \
+    libmanette-0.2-0 \
+    libegl1 \
+    libgudev-1.0-0 \
+    libgles2 \
+    x264 \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -34,8 +46,10 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Install playwright and browser
-RUN playwright install --with-deps chromium
+# Install playwright and browser with all dependencies
+ENV DEBIAN_FRONTEND=noninteractive
+RUN playwright install-deps
+RUN playwright install chromium --with-deps
 
 # Copy the rest of the application
 COPY . .
