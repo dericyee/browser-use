@@ -196,6 +196,38 @@ If you use Browser Use in your research or project, please cite:
 Made with ❤️ in Zurich and San Francisco
  </div> 
 
+# Browser-Use Web Interface
+
+A web interface for browser-use, allowing users to automate browser tasks using AI.
+
+## Local Development
+
+1. Install dependencies:
+```bash
+pip install -r requirements.txt
+playwright install
+```
+
+2. Set up environment variables:
+- Copy `.env.example` to `.env`
+- Add your OpenAI API key to `.env`
+
+3. Run the application:
+```bash
+python app.py
+```
+
+## Railway Deployment
+
+1. Fork this repository
+2. Create a new project on [Railway](https://railway.app)
+3. Connect your GitHub repository
+4. Add environment variables in Railway:
+   - `OPENAI_API_KEY`
+   - `BROWSER_USE_LOGGING_LEVEL`
+   - `PORT`
+5. Deploy!
+
 
 
 
